@@ -9,7 +9,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     '--input_file', 
     type=str, 
-    default='inputs/c_medium.in', 
+    default='c_medium.in', 
     help='relative path of input file') 
 parser.add_argument(
     '--dp_limit', 
