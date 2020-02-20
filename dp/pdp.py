@@ -1,8 +1,6 @@
 import numpy as np
 
 def dp(slice_arr, target):
-    slice_arr = [int(x) for x in slice_arr]
-    target = int(target)
     max_slices = np.empty([len(slice_arr)+1, target+1])
     use_pizza = np.empty([len(slice_arr)+1, target+1])
 

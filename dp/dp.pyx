@@ -1,84 +1,44 @@
-from __future__ import print_function
-
-def fib(n):
-    """Print the Fibonacci series up to n."""
-    a, b = 0, 1
-    while b < n:
-        print(b, end=' ')
-        a, b = b, a + b
-
-    print()
-'''
 import numpy as np
 cimport numpy as np
 cimport cython
 
-NP_FLOAT = np.float64
 NP_INT = np.int32
-
-ctypedef np.float64_t NP_FLOAT_t
 ctypedef np.int32_t NP_INT_t
 
-cdef int get_step(int k):
-	return 0 if k%2==0 else (k+1)/2
+cpdef dp(int[:] slice_arr, int target):
+    cdef int num_pizzas = len(slice_arr)
+    cdef int target_slices = target
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
-cpdef dp(float[:,:] Y, float[:,:] C, int exactly_one=False, bg_cost=0):
-	cdef int T = Y.shape[0]
-	cdef int K = Y.shape[1]
-	cdef int K_ext = 2*K+1
+    cdef NP_INT_t[:,:] max_slices = np.zeros([num_pizzas+1, target_slices+1], dtype=NP_INT)
+    cdef NP_INT_t[:,:] use_pizza = np.zeros([num_pizzas+1, target_slices+1], dtype=NP_INT)
+    
+    cdef int p
 
-	cdef NP_FLOAT_t[:,:] L = -np.ones([T+1,K_ext], dtype=NP_FLOAT)
-	cdef NP_INT_t[:,:] P = -np.ones([T+1,K_ext], dtype=NP_INT)
-	L[0,0] = 0
-	P[0,0] = 0
+    for i in range(num_pizzas+1):
+        for n in range(target_slices+1):
+            if i == 0 or n == 0:
+                max_slices[i, n] = 0
+                use_pizza[i, n] = 0
+            else:
+                p = slice_arr[i-1]
+                if p > n: # max_slices in this pizza more than total needed max_slices
+                    max_slices[i, n] = max_slices[i-1, n]
+                    use_pizza[i, n] = 0
+                else:
+                    if max_slices[i-1, n-p] + p > max_slices[i-1, n]:
+                        max_slices[i, n] = max_slices[i-1, n-p] + p
+                        use_pizza[i, n] = 1
+                    else:
+                        max_slices[i, n] = max_slices[i-1, n]
+                        use_pizza[i, n] = 0
+    
+    n = target
+    idx_arr = []
+    for i in range(len(slice_arr),0,-1):
+        if use_pizza[i, n] == 1:
+            n -= slice_arr[i-1]
+            idx_arr.append(i-1)
+    print(idx_arr[::-1])    
 
-	cdef int opt_label
-	cdef double opt_value
-	cdef int j
-	cdef NP_FLOAT_t[:] Lt
-	cdef NP_INT_t[:] Pt
-	for t in range(1,T+1):
-		Lt = L[t-1,:]
-		Pt = P[t-1,:]
-		for k in range(K_ext):
-			s = get_step(k)
+    return idx_arr[::-1]
 
-			opt_label = -1
-
-			j = k
-			if (opt_label==-1 or opt_value>Lt[j]) and Pt[j]!=-1 and (s==0 or not exactly_one):
-				opt_label = j
-				opt_value = Lt[j]
-
-			j = k-1
-			if j>=0 and (opt_label==-1 or opt_value>Lt[j]) and Pt[j]!=-1:
-				opt_label = j
-				opt_value = L[t-1][j]
-
-			if s!=0:
-				j = k-2
-				if j>=0 and (opt_label==-1 or opt_value>Lt[j]) and Pt[j]!=-1:
-					opt_label = j
-					opt_value = Lt[j]
-
-			if s!=0:
-				L[t,k] = opt_value + C[t-1][s-1]
-			else:
-				L[t,k] = opt_value + bg_cost
-			P[t,k] = opt_label
-
-	for t in range(T):
-		for k in range(K):
-			Y[t,k] = 0
-	if (L[T,K_ext-1] < L[T,K_ext-2] or (P[T,K_ext-2]==-1)):
-		k = K_ext-1
-	else:
-		k = K_ext-2
-	for t in range(T,0,-1):
-		s = get_step(k)
-		if s > 0:
-			Y[t-1,s-1] = 1
-		k = P[t,k]
-'''
