@@ -1,9 +1,9 @@
 import argparse 
 import utils
 import tester
-from dp_solution import dp_solution
+#from dp_solution import dp_solution
 from hybrid_solution import hybrid_solution
-
+from dp.tdp import dp as dp_solution
 
 parser = argparse.ArgumentParser() 
 parser.add_argument(
