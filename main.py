@@ -29,4 +29,4 @@ if __name__ == '__main__':
         idx_arr = hybrid_solution(slice_arr, target)
     
     tester.test_solution(target, total_pizzas, slice_arr, idx_arr)
-    utils.write_output_file(idx_arr)
+    utils.write_output_file(idx_arr, args.input_file)
