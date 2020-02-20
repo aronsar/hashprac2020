@@ -3,8 +3,8 @@ def load_input_file(input_file_path):
 
     (target, total_pizzas) = input_file.readline().strip().split(' ')
     slice_arr = input_file.readline().strip().split(' ')
-    
-    return (target, total_pizzas, slice_arr)
+
+    return (int(target), int(total_pizzas), slice_arr)
     
 def write_output_file(idx_array):
     pass
