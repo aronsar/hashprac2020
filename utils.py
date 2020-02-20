@@ -7,7 +7,7 @@ def load_input_file(input_file_path):
     
     (target, total_pizzas) = map(int, data[0].split(" "))
     slice_arr = list(map(int, data[1].split(" ")))
-    slice_arr = [int(x) for x in slice_arr]
+
     return int(target), int(total_pizzas), slice_arr
 
 
