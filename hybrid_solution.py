@@ -1,2 +1,2 @@
-def hybrid_solution(a, b):
+def hybrid_solution(slice_arr, target):
     pass
