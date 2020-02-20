@@ -1,10 +1,11 @@
 from pathlib import Path
 
 def load_input_file(input_file_path):
-    input_file = open("inputs/"+ str(input_file_path), 'r')
-
-    (target, total_pizzas) = input_file.readline().strip().split(' ')
-    slice_arr = input_file.readline().strip().split(' ')
+    with open("inputs/" + str(input_file_path), 'r') as input_file:
+        data = input_file.read().splitlines()
+    
+    (target, total_pizzas) = map(int, data[0].split(" "))
+    slice_arr = list(map(int, data[1].split(" ")))
 
     return (int(target), int(total_pizzas), slice_arr)
     
