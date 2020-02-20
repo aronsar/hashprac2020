@@ -30,5 +30,5 @@ def dp(slice_arr, target):
         if use_pizza[i, n] == 1:
             n -= slice_arr[i-1]
             idx_arr.append(i-1)
-    
+    print(idx_arr[::-1])    
     return idx_arr[::-1]
