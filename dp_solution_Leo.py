@@ -1,5 +1,5 @@
 import math
-from PracticeProblem import utils
+import utils
 
 
 def print2D(maze):
@@ -30,9 +30,7 @@ def knapsackProblem(pizzas, maxSlices):
 
 
 def main():
-
     maxSlices, types, pizzas = utils.load_input_file("c_medium.in")
-
     print(knapsackProblem(pizzas, maxSlices))
 
     return
